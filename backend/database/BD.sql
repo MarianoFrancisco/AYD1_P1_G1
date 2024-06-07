@@ -1,34 +1,36 @@
+CREATE DATABASE IF NOT EXISTS peliflixdb;
+USE peliflixdb;
 
-CREATE TABLE Alquiler
+CREATE TABLE IF NOT EXISTS Alquiler
 (
   id_alquiler      INT      NOT NULL,
   fecha_alquiler   DATETIME NOT NULL,
   fecha_devolucion DATETIME NOT NULL,
   multa            DOUBLE   NOT NULL,
   id_user          INT      NOT NULL,
-  id_pelicula      TEXT     NOT NULL,
+  id_pelicula      INT     NOT NULL,
   PRIMARY KEY (id_alquiler)
 );
 
-CREATE TABLE Comentario
+CREATE TABLE IF NOT EXISTS Comentario
 (
   id_comentario INT  NOT NULL,
   contenido     TEXT NOT NULL,
   id_user       INT  NOT NULL,
-  id_pelicula   TEXT NOT NULL,
+  id_pelicula   INT  NOT NULL, -- Cambio el tipo de dato a INT
   PRIMARY KEY (id_comentario)
 );
 
-CREATE TABLE Genero
+CREATE TABLE IF NOT EXISTS Genero
 (
   id_genero INT  NOT NULL,
   nombre    TEXT NOT NULL,
   PRIMARY KEY (id_genero)
 );
 
-CREATE TABLE Pelicula
+CREATE TABLE IF NOT EXISTS Pelicula
 (
-  id_pelicula     TEXT   NOT NULL,
+  id_pelicula     INT   NOT NULL,
   titulo          TEXT   NOT NULL,
   sinopsis        TEXT   NOT NULL,
   precio_alquiler DOUBLE NOT NULL,
@@ -40,16 +42,16 @@ CREATE TABLE Pelicula
   PRIMARY KEY (id_pelicula)
 );
 
-CREATE TABLE User
-(
-  id_user          INT  NOT NULL,
-  nombre           TEXT NOT NULL,
-  apellido         TEXT NOT NULL,
-  genero           CHAR NOT NULL COMMENT ''f' o 'm'',
-  correo           TEXT NOT NULL,
-  contrasenia      TEXT NOT NULL,
-  fecha_nacimiento DATE NOT NULL,
-  PRIMARY KEY (id_user)
+CREATE TABLE IF NOT EXISTS User (
+    id_user INT NOT NULL,
+    nombre TEXT NOT NULL,
+    apellido TEXT NOT NULL,
+    genero CHAR(1) NOT NULL,
+    correo TEXT NOT NULL,
+    contrasenia TEXT NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    PRIMARY KEY (id_user),
+    CHECK (genero IN ('F', 'M'))
 );
 
 ALTER TABLE Comentario
