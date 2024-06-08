@@ -5,9 +5,9 @@
 const connection = require('../../config/connectionDB');
 
 exports.login = (req, res) => {
-    const { user, password } = req.body;
-    const values_query = [user, password];
-    const query = 'SELECT * FROM Usuario WHERE user = ? AND password = ?';
+    const { correo, contrasenia } = req.body;
+    const values_query = [correo, contrasenia];
+    const query = 'SELECT * FROM User WHERE correo = ? AND contrasenia = ?';
 
     connection.query(query, values_query, (err, result) => {
         if (err) {
@@ -21,7 +21,7 @@ exports.login = (req, res) => {
            
             res.status(200).json({ message: 'Inicio de sesión exitoso', usuario: result[0] });
         } else {
-              res.status(401).json({ message: 'Nombre de usuario o contrasena incorrectos' });
+              res.status(401).json({ message: 'Correo o contraseña incorrectas' });
         }
     });
 

@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS Alquiler
 (
   id_alquiler      INT           NOT NULL AUTO_INCREMENT,
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Pelicula
 (
   id_pelicula     INT           NOT NULL AUTO_INCREMENT,
   titulo          VARCHAR(65)   NOT NULL,
-  sinopsis        VARCHAR(255)  NOT NULL,
+  sinopsis        TEXT          NOT NULL,
   precio_alquiler DECIMAL(10,2) NOT NULL,
   director        VARCHAR(65)   NOT NULL,
   anio_estreno    YEAR          NOT NULL,
@@ -41,11 +42,11 @@ CREATE TABLE IF NOT EXISTS Pelicula
 
 CREATE TABLE IF NOT EXISTS User (
     id_user INT NOT NULL AUTO_INCREMENT,
-    nombre TEXT NOT NULL,
-    apellido TEXT NOT NULL,
+    nombre VARCHAR(65) NOT NULL,
+    apellido VARCHAR(65) NOT NULL,
     genero CHAR(1) NOT NULL,
-    correo TEXT NOT NULL,
-    contrasenia TEXT NOT NULL,
+    correo  VARCHAR(255) NOT NULL,
+    contrasenia VARCHAR(65) NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     PRIMARY KEY (id_user),
     CHECK (genero IN ('F', 'M'))
