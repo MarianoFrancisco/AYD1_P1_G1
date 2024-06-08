@@ -1,5 +1,4 @@
-
-CREATE TABLE Alquiler
+CREATE TABLE IF NOT EXISTS Alquiler
 (
   id_alquiler      INT           NOT NULL AUTO_INCREMENT,
   fecha_alquiler   DATETIME      NOT NULL,
@@ -10,7 +9,7 @@ CREATE TABLE Alquiler
   PRIMARY KEY (id_alquiler)
 );
 
-CREATE TABLE Comentario
+CREATE TABLE IF NOT EXISTS Comentario
 (
   id_comentario INT          NOT NULL AUTO_INCREMENT,
   contenido     VARCHAR(255) NOT NULL,
@@ -19,14 +18,14 @@ CREATE TABLE Comentario
   PRIMARY KEY (id_comentario)
 );
 
-CREATE TABLE Genero
+CREATE TABLE IF NOT EXISTS Genero
 (
   id_genero INT         NOT NULL AUTO_INCREMENT,
   nombre    VARCHAR(65) NOT NULL,
   PRIMARY KEY (id_genero)
 );
 
-CREATE TABLE Pelicula
+CREATE TABLE IF NOT EXISTS Pelicula
 (
   id_pelicula     INT           NOT NULL AUTO_INCREMENT,
   titulo          VARCHAR(65)   NOT NULL,
@@ -40,16 +39,16 @@ CREATE TABLE Pelicula
   PRIMARY KEY (id_pelicula)
 );
 
-CREATE TABLE User
-(
-  id_user          INT         NOT NULL AUTO_INCREMENT,
-  nombre           VARCHAR(65) NOT NULL,
-  apellido         VARCHAR(65) NOT NULL,
-  genero           CHAR(1)     NOT NULL COMMENT ''F' o 'M'',
-  correo           VARCHAR(65) NOT NULL,
-  contrasenia      VARCHAR(65) NOT NULL,
-  fecha_nacimiento DATE        NOT NULL,
-  PRIMARY KEY (id_user)
+CREATE TABLE IF NOT EXISTS User (
+    id_user INT NOT NULL AUTO_INCREMENT,
+    nombre TEXT NOT NULL,
+    apellido TEXT NOT NULL,
+    genero CHAR(1) NOT NULL,
+    correo TEXT NOT NULL,
+    contrasenia TEXT NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    PRIMARY KEY (id_user),
+    CHECK (genero IN ('F', 'M'))
 );
 
 ALTER TABLE User
