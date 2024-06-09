@@ -2,25 +2,28 @@
 * @authors
 * Mariano Camposeco {@literal (mariano1941@outlook.es)}
 */
-// Import module
-const express = require('express') 
-const cors = require('cors')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const path = require('path');
 
+const app = express();
 
-// Creación de la aplicación Express
-const app = express(); 
 app.use(express.json());
-
-
-const bodyParser = require('body-parser'); 
 app.use(bodyParser.json({ limit: '15mb' }));
+app.use(cors());
+app.use('/img-movie',express.static(path.join(`${__dirname}/img`)));
 
-app.use(cors())
+const alquilerRouter = require('./app/routes/alquiler.routes.js');
+const comentarioRouter = require('./app/routes/comentario.routes.js');
+const generoRouter = require('./app/routes/genero.routes.js');
+const peliculaRouter = require('./app/routes/pelicula.routes.js');
+const userRouter = require('./app/routes/user.routes.js');
 
-
-// Import routes
-const loginRouter= require('./app/routes/login.routes.js')
-
-app.use(loginRouter)
+app.use(alquilerRouter);
+app.use(comentarioRouter);
+app.use(generoRouter);
+app.use(peliculaRouter);
+app.use(userRouter);
 
 module.exports = app;
