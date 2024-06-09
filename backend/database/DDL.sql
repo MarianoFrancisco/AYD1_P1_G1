@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Alquiler
   fecha_alquiler   DATETIME      NOT NULL,
   fecha_devolucion DATETIME      NOT NULL,
   multa            DECIMAL(10,2) NOT NULL,
+  devuelto         TINYINT(1)    NOT NULL DEFAULT 0,
   id_user          INT           NOT NULL,
   id_pelicula      INT           NOT NULL,
   PRIMARY KEY (id_alquiler)
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS Pelicula
   anio_estreno    YEAR          NOT NULL,
   duracion        TIME          NOT NULL,
   imagen          VARCHAR(255)  NOT NULL,
+  alquilado       TINYINT(1)    NOT NULL DEFAULT 0,
   id_genero       INT           NOT NULL,
   PRIMARY KEY (id_pelicula)
 );
