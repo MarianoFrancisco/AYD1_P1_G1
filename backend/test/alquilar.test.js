@@ -4,7 +4,6 @@
 */
 const request = require('supertest');
 const app = require('../app');
-const sequelize = require('../config/connectionDB');
 const peliculaController = require('../app/controllers/peliculaController');
 const api = '/api';
 const alquiler = api + '/alquileres';
@@ -29,17 +28,13 @@ describe('Modulo de Alquilar', () => {
 
     it('Debería cambiar el estado de un alquiler a devuelto y devolver un estado 200', async () => {
         const alquiler_id_devuelto = `${alquiler}/${id_alquiler}/devuelto`;
-        const return_rent = {
-            multa: 0,
-            fecha_devolucion: '2024-06-10 12:00:00'
-        };
 
-        const cambioEstadoResponse = await request(app)
+        const cambiarEstado = await request(app)
             .patch(alquiler_id_devuelto)
-            .send(return_rent);
+            .send();
 
-        expect(cambioEstadoResponse.status).toBe(200);
-        expect(cambioEstadoResponse.body.devuelto).toBe(1);
+        expect(cambiarEstado.status).toBe(200);
+        expect(cambiarEstado.body.devuelto).toBe(1);
         await peliculaController.actualizarEstadoAlquilado(rent.id_pelicula, 1);
     });
 
