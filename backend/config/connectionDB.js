@@ -2,25 +2,26 @@
 * @authors
 * Mariano Camposeco {@literal (mariano1941@outlook.es)}
 */
-// Require mysql
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const mysql = require('mysql');
-
-// Call function
-const connection = mysql.createConnection({
+const sequelize = new Sequelize(
+  process.env.MYSQL_DATABASE,
+  process.env.MYSQL_USER,
+  process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
+  dialect: 'mysql',
+  port: process.env.MYSQL_PORT,
+  logging: false
 });
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Error conectando a la base de datos: ', err);
-    return;
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Conexión establecida correctamente con la base de datos.');
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
   }
-  console.log('Conectado a la base de datos MySQL.');
-});
+})();
 
-module.exports = connection;
+module.exports = sequelize;
