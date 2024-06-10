@@ -1,10 +1,4 @@
-import { useEffect } from 'react'
-
 export function RentalHistory() {
-  useEffect(() => {
-    document.title = 'Historial | Peliflix'
-  })
-
   return (
     <div className="flex justify-center bg-gray-100 py-6">
       <div className="mx-2 w-4/5">
