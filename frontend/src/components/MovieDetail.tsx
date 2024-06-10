@@ -1,10 +1,21 @@
+import { useState } from 'react'
 import { CommentsSection } from './CommentsSection'
 
 export function MovieDetail() {
+  const [showComments, setShowComments] = useState(false)
+
+  const toggleComments = () => {
+    setShowComments(!showComments)
+  };
+
+  const closeComments = () => {
+    setShowComments(false)
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-5xl w-full p-4 rounded-lg shadow-md">
-        <div className="flex mb-4">
+    <div className="flex justify-center bg-gray-50" style={{ margin: '10px' }}>
+      <div className="max-w-5xl w-full p-4 rounded-lg shadow-md relative">
+        <div className="flex mb-2">
           <img
             src="https://cdn.pixabay.com/photo/2019/04/24/21/55/cinema-4153289_640.jpg"
             alt="Movie"
@@ -19,18 +30,30 @@ export function MovieDetail() {
             <p className="text-base"><strong>Año de Estreno:</strong> 2021</p>
             <p className="text-base"><strong>Duración:</strong> 120 minutos</p>
             <p className="text-base"><strong>Género:</strong> Ejemplo de Género</p>
-            <div className="text-sm text-yellow-800 font-semibold flex items-center mt-2">
-              <svg className="w-4 h-4 mr-1 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M10 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zM9 9h2v5H9V9zm0-2h2V7H9v.001zM9 6h2V5H9v1z" />
-              </svg>
-              La devolución de la película debe ser en 48 horas desde la fecha de alquiler.
+            <div className="flex">
+              <button className="mt-3 mr-2 px-4 py-2 text-sm bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all">
+                Alquilar
+              </button>
+              <button className="mt-3 px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all" onClick={toggleComments}>
+                Ver Comentarios
+              </button>
             </div>
-            <button className="mt-3 px-4 py-2 text-sm bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all">
-              Alquilar
-            </button>
           </div>
         </div>
-        <CommentsSection />
+        {showComments && (
+          <div className="fixed top-0 right-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" style={{ zIndex: 9999 }}>
+            <div className="bg-white max-w-6xl p-4 rounded-lg shadow-lg" style={{ height: '70vh', overflowY: 'auto', width: '50vw', position: 'relative' }}>
+              <div style={{ position: 'sticky', top: '0', right: '0', textAlign: 'right' }}>
+                <button className="text-gray-600" onClick={closeComments}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <CommentsSection />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
