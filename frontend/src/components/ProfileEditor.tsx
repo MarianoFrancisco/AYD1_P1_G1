@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useEffect } from 'react'
 
 export function ProfileEditor() {
   const [showPassword, setShowPassword] = useState(false)
@@ -8,14 +7,10 @@ export function ProfileEditor() {
     setShowPassword(!showPassword)
   }
 
-  useEffect(() => {
-    document.title = 'Editar Perfil | Peliflix'
-  })
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full">
-        <h2 className="text-2xl font-bold mb-2 text-center">Editar Perfil</h2>
+      <div className="bg-white p-4 rounded-lg shadow-md max-w-lg w-full mt-4 mb-4">
+        <h2 className="text-3xl font-bold mb-4 text-center">Editar Perfil</h2>
         <form>
           <div className="mb-2">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
@@ -109,7 +104,7 @@ export function ProfileEditor() {
               required
             />
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-4">
             <button
               type="submit"
               className="px-4 py-2 bg-gray-800 text-white rounded-md shadow-sm hover:bg-gray-900"
