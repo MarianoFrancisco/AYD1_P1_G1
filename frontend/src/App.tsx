@@ -12,6 +12,7 @@ import { LoginForm } from "@/components/LoginForm";
 import { UserHome } from "./pages/UserHome";
 import { ProtectedRoute } from "./ProtectedRoute";
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<string>("");
   useEffect(() => {
