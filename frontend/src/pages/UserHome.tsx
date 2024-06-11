@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { RentalHistory } from '../components/RentalHistory'
 import { ProfileEditor } from '../components/ProfileEditor'
 
-export function UserHome() {
+export function UserHome({ onLogout: onLogout }: { onLogout: () => void }) {
   const [selectedOption, setSelectedOption] = useState('Catálogo de películas')
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -12,6 +12,9 @@ export function UserHome() {
   const handleOptionClick = (option: any) => {
     setSelectedOption(option)
     setMenuOpen(false)
+    if(option === 'Cerrar sesión') {
+      onLogout();
+    }
   }
 
   const toggleMenu = () => {
@@ -95,6 +98,11 @@ export function UserHome() {
                 className="block px-4 py-2 hover:bg-gray-700 w-full text-left text-white"
               >
                 Editar perfil
+              </button>
+              <button 
+                onClick={() => handleOptionClick('Adinistrador')} 
+                className="block px-4 py-2 hover:bg-gray-700 w-full text-left text-white">
+                Adinistrador
               </button>
               <button
                 onClick={() => handleOptionClick('Cerrar sesión')}
