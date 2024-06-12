@@ -6,7 +6,7 @@ V 1.0
 ## Fecha de Elaboración: 
 Junio 2024
 ## Desarrollado por: 
-Grupo 1, Departamento de Informatica, Ingeniería en Ciencias y Sistemas, Universidad de San Carlos de Guatemala.
+Grupo 1, Analisis y diseño de sistemas 1, Departamento de Informática, Ingeniería en Ciencias y Sistemas, Universidad de San Carlos de Guatemala.
 > -  **Mariano Francisco Camposeco Camposeco - 202030987**
 > -  **Erick Estuardo Patzan Polanco    - 201602627**
 > -  **María Cecilia Cotzajay López - 201602659**
@@ -53,22 +53,22 @@ PeliFlix es una plataforma de streaming y alquiler de películas en línea, dise
 ### Modelo Entidad Relacion (ERD)
 El diagrama describe las entidades y sus relaciones dentro del sistema de gestion de alquileres de películas. Este es un diagrama fundamental para la estructura de la base de datos ya que define como se almacenan y conectan las entidades descritas el cual asegura la integridad referencial y facilita la consulta eficiente de los datos.
 
-  ![Diagrama_Entidad_Relacion.PNG](Diagrama_Entidad_Relacion.PNG)
+  ![documentation/Diagrama_Entidad_Relacion.PNG](documentation/Diagrama_Entidad_Relacion.PNG)
 
 ### Diagrama de Clases
 El diagrama esta basado en el modelo entidad relacion. Cada clase corresponde a una entidad en el ERD, define sus atributos y métodos. Este diagrama es fundamental para la implementación del sistema, ya que proporciona una estructura clara para la lógica del negocio y la interacción con la base de datos.
 
-  ![Diagrama_Clases.PNG](Diagrama_Clases.PNG)
+  ![documentation/Diagrama_Clases.PNG]documentation/(Diagrama_Clases.PNG)
 
 ### Diagama de Componentes
 El diagrama esta basado en el diagrama de clases. Muestra la organización y la relación entre los componentes de software del sistema. Este diagrama proporciona una visión clara de la arquitectura del software, facilitando la comprensión de la distribución de responsabilidades y la comunicación entre los diferentes módulos ó componentes del sistema.
 
-  ![Diagrama_de_Componentes.PNG](Diagrama_de_Componentes.PNG)
+  ![Diagrama_de_Componentes.png](Diagrama_de_Componentes.png)
 
 ### Diagrama de Despliegue
 El diagrama esta basado en el diagrama de componentes. Proporciona una visión clara de la infraestructura necesaria para ejecutar el sistema, incluyendo detalles sobre la comunicación entre los servidores y la base de datos, asegurando que todos los componentes del sistema estén correctamente conectados y desplegados para ofrecer un rendimiento óptimo.
 
-  ![Diagrama_de_Despliegue.PNG](Diagrama_de_Despliegue.PNG)
+  ![documentation/Diagrama_de_Despliegue.PNG](documentation/Diagrama_de_Despliegue.PNG)
 
 ## Metodología Implementada
 ### SCRUM
