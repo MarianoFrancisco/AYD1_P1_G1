@@ -53,12 +53,12 @@ PeliFlix es una plataforma de streaming y alquiler de películas en línea, dise
 ### Modelo Entidad Relacion (ERD)
 El diagrama describe las entidades y sus relaciones dentro del sistema de gestion de alquileres de películas. Este es un diagrama fundamental para la estructura de la base de datos ya que define como se almacenan y conectan las entidades descritas el cual asegura la integridad referencial y facilita la consulta eficiente de los datos.
 
-  ![documentation/Diagrama_Entidad_Relacion.PNG](documentation/Diagrama_Entidad_Relacion.PNG)
+  ![Diagrama_Entidad_Relacion.png](Diagrama_Entidad_Relacion.png)
 
 ### Diagrama de Clases
 El diagrama esta basado en el modelo entidad relacion. Cada clase corresponde a una entidad en el ERD, define sus atributos y métodos. Este diagrama es fundamental para la implementación del sistema, ya que proporciona una estructura clara para la lógica del negocio y la interacción con la base de datos.
 
-  ![documentation/Diagrama_Clases.PNG]documentation/(Diagrama_Clases.PNG)
+  ![Diagrama_Clases.png](Diagrama_Clases.png)
 
 ### Diagama de Componentes
 El diagrama esta basado en el diagrama de clases. Muestra la organización y la relación entre los componentes de software del sistema. Este diagrama proporciona una visión clara de la arquitectura del software, facilitando la comprensión de la distribución de responsabilidades y la comunicación entre los diferentes módulos ó componentes del sistema.
@@ -68,7 +68,7 @@ El diagrama esta basado en el diagrama de clases. Muestra la organización y la 
 ### Diagrama de Despliegue
 El diagrama esta basado en el diagrama de componentes. Proporciona una visión clara de la infraestructura necesaria para ejecutar el sistema, incluyendo detalles sobre la comunicación entre los servidores y la base de datos, asegurando que todos los componentes del sistema estén correctamente conectados y desplegados para ofrecer un rendimiento óptimo.
 
-  ![documentation/Diagrama_de_Despliegue.PNG](documentation/Diagrama_de_Despliegue.PNG)
+  ![Diagrama_de_Despliegue.png](Diagrama_de_Despliegue.png)
 
 ## Metodología Implementada
 ### SCRUM
