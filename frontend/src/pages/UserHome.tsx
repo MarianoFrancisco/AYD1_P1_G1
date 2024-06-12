@@ -2,17 +2,50 @@ import { useState, useEffect, useRef } from 'react'
 import { RentalHistory } from '../components/RentalHistory'
 import { ProfileEditor } from '../components/ProfileEditor'
 import { MovieDetail } from '@/components/MovieDetail'
+import Cookies from 'js-cookie'
 
-export function UserHome() {
+interface User {
+  id: number
+  nombre: string
+  apellido: string
+  genero: string
+  correo: string
+  fecha_nacimiento: string
+}
+
+interface Pelicula {
+  id_pelicula: number
+  titulo: string
+  sinopsis: string
+  precio_alquiler: string
+  director: string
+  anio_estreno: string
+  duracion: string
+  genero: string
+}
+
+export function UserHome({ onLogout }: { onLogout: () => void }) {
   const [selectedOption, setSelectedOption] = useState('Catálogo de películas')
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const [hoverPeliflix, setHoverPeliflix] = useState(false)
   const [hoverMenu, setHoverMenu] = useState(false)
+  const [user, setUser] = useState<User>({
+    id: 0,
+    nombre: '',
+    apellido: '',
+    genero: '',
+    correo: '',
+    fecha_nacimiento: ''
+  })
+  const [movies, setMovies] = useState<Pelicula[]>([])
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option)
     setMenuOpen(false)
+    if (option === 'Cerrar sesión') {
+      onLogout()
+    }
   }
 
   const toggleMenu = () => {
@@ -46,6 +79,9 @@ export function UserHome() {
       }
     }
 
+    initializeUser()
+    fetchMovies()
+
     document.title = 'User Home | Peliflix'
     document.addEventListener('mousedown', handleClickOutside)
 
@@ -54,28 +90,56 @@ export function UserHome() {
     }
   }, [])
 
-  const renderMovieCatalog = () => {
-    return <>
-      <MovieDetail />
-      <MovieDetail />
-      <MovieDetail />
-    </>
+  const initializeUser = () => {
+    const token = getToken()
+
+    if (token) {
+      const decodedUser = decodeToken(token)
+      setUser(decodedUser)
+    } else {
+      console.log('No se encontró ningún token en las cookies.')
+    }
   }
 
-  const renderRentedMovies = () => {
-    return <>
-      <MovieDetail />
-      <MovieDetail />
-      <MovieDetail />
-    </>
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/peliculas`)
+      const data = await response.json()
+      setMovies(data)
+    } catch (error) {
+      console.error("Error fetching movies:", error)
+    }
   }
+
+  const getToken = () => {
+    return Cookies.get('token')
+  }
+
+  const decodeToken = (token: string) => {
+    return JSON.parse(atob(token.split('.')[1])) as User
+  }
+
+  const renderMovieCatalog = () => (
+    <>
+      {movies.map((movie) => (
+        <MovieDetail id_user={user.id} id_pelicula={movie.id_pelicula} />
+      ))}
+    </>
+  )
+
+  const renderRentedMovies = () => (
+    <>
+      {movies.map((movie) => (
+        <MovieDetail id_user={user.id} id_pelicula={movie.id_pelicula} />
+      ))}
+    </>
+  )
 
   return (
     <div className="min-h-screen bg-white text-black">
       <nav className="bg-gray-900 py-4 px-24 flex justify-between items-center text-white">
         <div
-          className={`flex items-center space-x-4 ${hoverPeliflix ? 'text-gray-400' : 'text-white'
-            }`}
+          className={`flex items-center space-x-4 ${hoverPeliflix ? 'text-gray-400' : 'text-white'}`}
           onMouseEnter={handlePeliflixHover}
           onMouseLeave={handlePeliflixLeave}
         >
@@ -96,7 +160,7 @@ export function UserHome() {
         <div className="relative" ref={menuRef} onMouseEnter={handleMenuHover} onMouseLeave={handleMenuLeave}>
           <button onClick={toggleMenu}>
             <span className={menuOpen || hoverMenu ? 'text-gray-400' : 'text-white'}>
-              Nombre de usuario &#x25BE;
+              {user ? `${user.nombre} ${user.apellido}` : 'Nombre de usuario'} &#x25BE;
             </span>
           </button>
           {menuOpen && (
@@ -127,7 +191,7 @@ export function UserHome() {
         {selectedOption === 'Catálogo de películas' && renderMovieCatalog()}
         {selectedOption === 'Películas alquiladas' && renderRentedMovies()}
         {selectedOption === 'RentalHistory' && <RentalHistory />}
-        {selectedOption === 'ProfileEditor' && <ProfileEditor />}
+        {selectedOption === 'ProfileEditor' && <ProfileEditor user={user} setUser={setUser} />}
       </main>
     </div>
   )

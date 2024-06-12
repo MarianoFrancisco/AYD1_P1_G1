@@ -1,35 +1,83 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { CommentsSection } from './CommentsSection'
 
-export function MovieDetail() {
+interface MovieDetailProps {
+  id_user: number
+  id_pelicula: number
+}
+
+interface MovieData {
+  titulo: string
+  sinopsis: string
+  precio_alquiler: string
+  director: string
+  anio_estreno: number
+  duracion: string
+  imagen: string
+  genero: string
+}
+
+export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, id_pelicula }) => {
   const [showComments, setShowComments] = useState(false)
+  const [movieData, setMovieData] = useState<MovieData | null>(null)
+
+  useEffect(() => {
+    const fetchMovieData = async () => {
+      try {
+        const movieResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/peliculas/${id_pelicula}`)
+        const movieData = await movieResponse.json()
+
+        const genreResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/generos/${movieData.id_genero}`)
+        const genreData = await genreResponse.json()
+
+        setMovieData({
+          titulo: movieData.titulo,
+          sinopsis: movieData.sinopsis,
+          precio_alquiler: movieData.precio_alquiler,
+          director: movieData.director,
+          anio_estreno: movieData.anio_estreno,
+          duracion: movieData.duracion,
+          imagen: movieData.imagen,
+          genero: genreData.nombre,
+        })
+      } catch (error) {
+        console.error("Error fetching movie data:", error)
+      }
+    }
+
+    fetchMovieData()
+  }, [id_pelicula])
 
   const toggleComments = () => {
     setShowComments(!showComments)
-  };
+  }
 
   const closeComments = () => {
     setShowComments(false)
-  };
+  }
+
+  if (!movieData) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="flex justify-center bg-gray-50" style={{ margin: '10px' }}>
       <div className="max-w-5xl w-full p-4 rounded-lg shadow-md relative">
         <div className="flex mb-2">
           <img
-            src="https://cdn.pixabay.com/photo/2019/04/24/21/55/cinema-4153289_640.jpg"
+            src={movieData.imagen}
             alt="Movie"
             className="w-48 h-auto rounded-lg shadow-lg mr-4 mb-4"
             style={{ margin: '0 1rem 0 0', padding: '0.5rem', borderRadius: '16px' }}
           />
           <div className="flex-1 p-4 bg-white rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-2" style={{ fontWeight: 'bold' }}>Ejemplo de Título</h2>
-            <p className="text-base"><strong>Sinopsis:</strong> Ejemplo de Sinopsis</p>
-            <p className="text-base"><strong>Precio de Alquiler:</strong> Q10</p>
-            <p className="text-base"><strong>Director:</strong> Ejemplo de Director</p>
-            <p className="text-base"><strong>Año de Estreno:</strong> 2021</p>
-            <p className="text-base"><strong>Duración:</strong> 120 minutos</p>
-            <p className="text-base"><strong>Género:</strong> Ejemplo de Género</p>
+            <h2 className="text-xl font-semibold mb-2" style={{ fontWeight: 'bold' }}>{movieData.titulo}</h2>
+            <p className="text-base"><strong>Sinopsis:</strong> {movieData.sinopsis}</p>
+            <p className="text-base"><strong>Precio de Alquiler:</strong> {movieData.precio_alquiler}</p>
+            <p className="text-base"><strong>Director:</strong> {movieData.director}</p>
+            <p className="text-base"><strong>Año de Estreno:</strong> {movieData.anio_estreno}</p>
+            <p className="text-base"><strong>Duración:</strong> {movieData.duracion} minutos</p>
+            <p className="text-base"><strong>Género:</strong> {movieData.genero}</p>
             <div className="flex">
               <button className="mt-3 mr-2 px-4 py-2 text-sm bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-all">
                 Alquilar
@@ -50,7 +98,7 @@ export function MovieDetail() {
                   </svg>
                 </button>
               </div>
-              <CommentsSection />
+              <CommentsSection id_user={id_user} id_pelicula={id_pelicula} />
             </div>
           </div>
         )}

@@ -1,23 +1,81 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-export function ProfileEditor() {
+interface User {
+  id: number
+  nombre: string
+  apellido: string
+  genero: string
+  correo: string
+  fecha_nacimiento: string
+}
+
+interface ProfileEditorProps {
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>
+}
+
+export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, setUser }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
+    setShowPassword(!showPassword);
   }
+
+  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setUser({ ...user, genero: value })
+  }
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget);
+    const formDataObject: any = {}
+
+    formData.forEach((value, key) => {
+      formDataObject[key] = value
+    });
+
+    if (!formDataObject['password']) {
+      delete formDataObject['password'];
+    }
+    console.log(JSON.stringify(formDataObject))
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/${user.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(formDataObject),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al guardar los cambios')
+      }
+
+      const { contrasenia, id_user, ...updatedUser } = await response.json()
+      const modifiedUser = { ...updatedUser, id: id_user }
+      setUser(modifiedUser)
+
+      alert('Los cambios se guardaron correctamente');
+    } catch (error: any) {
+      alert(error.message)
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-4 rounded-lg shadow-md max-w-lg w-full mt-4 mb-4">
         <h2 className="text-3xl font-bold mb-4 text-center">Editar Perfil</h2>
-        <form>
+        <form onSubmit={handleFormSubmit}>
           <div className="mb-2">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
             <input
               type="text"
               id="nombre"
               name="nombre"
+              defaultValue={user.nombre}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               required
             />
@@ -28,50 +86,53 @@ export function ProfileEditor() {
               type="text"
               id="apellido"
               name="apellido"
+              defaultValue={user.apellido}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               required
             />
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Género</label>
-            <div className="mt-2 space-y-2">
-              <div className="flex items-center">
+            <div className="flex items-center">
+              <label className="mr-4">
                 <input
-                  id="genero_m"
-                  name="genero"
                   type="radio"
+                  name="genero"
                   value="M"
-                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                  required
+                  checked={user.genero === 'M'}
+                  onChange={handleGenderChange}
+                  className="mr-2"
                 />
-                <label htmlFor="genero_m" className="ml-2 block text-sm font-medium text-gray-700">Masculino</label>
-              </div>
-              <div className="flex items-center">
+                Masculino
+              </label>
+              <label>
                 <input
-                  id="genero_f"
-                  name="genero"
                   type="radio"
+                  name="genero"
                   value="F"
-                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                  required
+                  checked={user.genero === 'F'}
+                  onChange={handleGenderChange}
+                  className="mr-2"
                 />
-                <label htmlFor="genero_f" className="ml-2 block text-sm font-medium text-gray-700">Femenino</label>
-              </div>
+                Femenino
+              </label>
             </div>
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Dirección de correo electrónico</label>
+            <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-1">Dirección de correo electrónico</label>
             <input
               type="email"
-              id="email"
-              name="email"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              id="correo"
+              name="correo"
+              defaultValue={user.correo}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-200 cursor-not-allowed"
+              required
               readOnly
             />
           </div>
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1 flex justify-between items-center">
-              Contraseña
+              Contraseña (Opcional) <span className="text-gray-500 text-xs"></span>
               <span onClick={togglePasswordVisibility} className="cursor-pointer">
                 {showPassword ? (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,9 +150,9 @@ export function ProfileEditor() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              name="password"
+              name="contrasenia"
+              placeholder="Ingrese una nueva contraseña"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              required
             />
           </div>
           <div className="mb-4">
@@ -100,8 +161,10 @@ export function ProfileEditor() {
               type="date"
               id="fecha_nacimiento"
               name="fecha_nacimiento"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              defaultValue={user.fecha_nacimiento}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-200 cursor-not-allowed"
               required
+              readOnly
             />
           </div>
           <div className="flex justify-center mt-4">
