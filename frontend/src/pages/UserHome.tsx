@@ -13,6 +13,17 @@ interface User {
   fecha_nacimiento: string
 }
 
+interface Pelicula {
+  id_pelicula: number
+  titulo: string
+  sinopsis: string
+  precio_alquiler: string
+  director: string
+  anio_estreno: string
+  duracion: string
+  genero: string
+}
+
 export function UserHome({ onLogout }: { onLogout: () => void }) {
   const [selectedOption, setSelectedOption] = useState('Catálogo de películas')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -25,8 +36,9 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
     apellido: '',
     genero: '',
     correo: '',
-    fecha_nacimiento: '',
+    fecha_nacimiento: ''
   })
+  const [movies, setMovies] = useState<Pelicula[]>([])
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option)
@@ -68,6 +80,7 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
     }
 
     initializeUser()
+    fetchMovies()
 
     document.title = 'User Home | Peliflix'
     document.addEventListener('mousedown', handleClickOutside)
@@ -88,6 +101,16 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
     }
   }
 
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/peliculas`)
+      const data = await response.json()
+      setMovies(data)
+    } catch (error) {
+      console.error("Error fetching movies:", error)
+    }
+  }
+
   const getToken = () => {
     return Cookies.get('token')
   }
@@ -98,17 +121,17 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
 
   const renderMovieCatalog = () => (
     <>
-      <MovieDetail />
-      <MovieDetail />
-      <MovieDetail />
+      {movies.map((movie) => (
+        <MovieDetail id_user={user.id} id_pelicula={movie.id_pelicula} />
+      ))}
     </>
   )
 
   const renderRentedMovies = () => (
     <>
-      <MovieDetail />
-      <MovieDetail />
-      <MovieDetail />
+      {movies.map((movie) => (
+        <MovieDetail id_user={user.id} id_pelicula={movie.id_pelicula} />
+      ))}
     </>
   )
 
@@ -153,11 +176,6 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
                 className="block px-4 py-2 hover:bg-gray-700 w-full text-left text-white"
               >
                 Editar perfil
-              </button>
-              <button
-                onClick={() => handleOptionClick('Adinistrador')}
-                className="block px-4 py-2 hover:bg-gray-700 w-full text-left text-white">
-                Admistrador
               </button>
               <button
                 onClick={() => handleOptionClick('Cerrar sesión')}
