@@ -11,6 +11,8 @@ import "./index.css";
 import { LoginForm } from "@/components/LoginForm";
 import { UserHome } from "./pages/UserHome";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { AdminHome } from "./pages/AdminHome";
+import { RegistrationForm } from "./components/RegistrationForm";
 
 
 function App() {
@@ -51,6 +53,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn} type={2}>
+              <AdminHome onLogout={handleLogoutApp}></AdminHome>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn} type={3}>
+              <div className="flex justify-center mt-20">
+                <RegistrationForm></RegistrationForm>
+              </div>
+            </ProtectedRoute>
+          }/>
         <Route
           path="/"
           element={<Navigate to={isLoggedIn !== "" ? "/home" : "/login"} />}
