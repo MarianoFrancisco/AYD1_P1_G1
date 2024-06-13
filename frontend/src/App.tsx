@@ -24,8 +24,11 @@ function App() {
       setIsLoggedIn(token);
     }
   }, [isLoggedIn]);
-  const handleLoginApp = (token: string) => {
+  const handleLoginApp = (token: string, admin: boolean) => {
     Cookies.set("token", token);
+    if (admin) {
+      Cookies.set("admin", "true");
+    }
     setIsLoggedIn(token);
   };
   const handleLogoutApp = () => {
@@ -38,7 +41,7 @@ function App() {
         <Route
           path="/login"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn} type={0}>
+            <ProtectedRoute isLoggedIn={isLoggedIn} type={0} admin={Cookies.get("admin") === "true"}>
               <div className="flex justify-center mt-60">
                 <LoginForm onLogin={handleLoginApp}></LoginForm>
               </div>
@@ -48,7 +51,7 @@ function App() {
         <Route
           path="/home"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn} type={1}>
+            <ProtectedRoute isLoggedIn={isLoggedIn} type={1} admin={Cookies.get("admin") === "true"}>
               <UserHome onLogout={handleLogoutApp}></UserHome>
             </ProtectedRoute>
           }
@@ -56,15 +59,17 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn} type={2}>
-              <AdminHome onLogout={handleLogoutApp}></AdminHome>
+            <ProtectedRoute isLoggedIn={isLoggedIn} type={2} admin={Cookies.get("admin") === "true"}>
+              
+              <AdminHome ></AdminHome>
+              
             </ProtectedRoute>
           }
         />
         <Route
           path="/register"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn} type={3}>
+            <ProtectedRoute isLoggedIn={isLoggedIn} type={3} admin={Cookies.get("admin") === "true"}>
               <div className="flex justify-center mt-20">
                 <RegistrationForm></RegistrationForm>
               </div>
