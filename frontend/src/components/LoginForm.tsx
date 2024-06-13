@@ -30,7 +30,7 @@ const FormSchema = z.object({
   }),
 });
 
-export function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
+export function LoginForm({ onLogin }: { onLogin: (token: string, admin: boolean) => void }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -53,7 +53,8 @@ export function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
       form.setError("correo", json.error.message);
       return;
     }
-    onLogin(json.token);
+    const admin = data.correo === "admin@gmail.com";
+    onLogin(json.token, admin);
   }
 
   return (
