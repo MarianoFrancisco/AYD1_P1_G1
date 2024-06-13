@@ -61,7 +61,7 @@ function App() {
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn} type={2} admin={Cookies.get("admin") === "true"}>
               
-              <AdminHome ></AdminHome>
+              <AdminHome onLogout={handleLogoutApp}></AdminHome>
               
             </ProtectedRoute>
           }

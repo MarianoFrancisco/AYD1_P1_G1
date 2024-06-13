@@ -2,6 +2,7 @@ import { columns } from "../components/columns";
 import { Pelicula } from "@/types";
 import { DataTable } from "../components/data-table";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 // Función para obtener datos
 async function getData(): Promise<Pelicula[]> {
@@ -20,7 +21,7 @@ async function getData(): Promise<Pelicula[]> {
 }
 
 // Componente funcional AdminHome
-export function AdminHome() {
+export function AdminHome({ onLogout }: { onLogout: () => void }) {
   const [data, setData] = useState<Pelicula[]>([]);
 
   useEffect(() => {
@@ -35,7 +36,8 @@ export function AdminHome() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold">Peliculas</h1>
+      <div className="flex justify-between items-center"><h1 className="text-3xl font-bold">Administrador</h1> <Button onClick={onLogout}>Cerrar sesión</Button></div>
+      <h2 className="text-2xl font-bold">Peliculas</h2>
       <DataTable columns={columns} data={data} />
     </div>
   );
