@@ -22,8 +22,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
+import { MovieForm } from "./MovieForm"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -99,13 +99,11 @@ export const columns: ColumnDef<Pelicula>[] = [
               <DialogHeader>
                 <DialogTitle>Editar Película</DialogTitle>
               </DialogHeader>
-              <DialogDescription>
-                {/* Agregar formulario luego */}
-                <p>Edita los detalles de la película {pelicula.titulo}.</p>
+              <DialogDescription asChild>
+                <MovieForm pelicula={pelicula}></MovieForm>
               </DialogDescription>
               <DialogFooter>
                 <Button onClick={() => setIsEditDialogOpen(false)}>Cancelar</Button>
-                <Button type="submit">Guardar Cambios</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
