@@ -45,7 +45,7 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
         let movies: MovieData[] = []
         if (alquilado) {
           const rentedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/alquileres/${id_user}/0`)
-          const rentedMovies = await rentedResponse.json()
+          const rentedMovies = await rentedResponse.json();
           const rentedMovieIds = rentedMovies.map((rental: { id_pelicula: number }) => rental.id_pelicula)
 
           const moviePromises = rentedMovieIds.map((movieId: number) =>
@@ -61,8 +61,8 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
               fecha_alquiler: rentalInfo?.fecha_alquiler,
               multa: rentalInfo?.multa,
               id_alquiler: rentalInfo?.id_alquiler,
-            };
-          });
+            }
+          })
         } else {
           const movieResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/peliculas`)
           const allMovies = await movieResponse.json()
@@ -79,7 +79,7 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
           genero: genres[index].nombre,
         }))
 
-        setMovieData(moviesWithGenres)
+        setMovieData(moviesWithGenres);
       } catch (error) {
         console.error("Error fetching movie data:", error)
       } finally {
@@ -87,8 +87,23 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
       }
     }
 
-    fetchMovieData()
+    fetchMovieData();
   }, [id_user, alquilado])
+
+  useEffect(() => {
+    const hasMoviesWithZeroDelay = () => {
+      return movieData.some(movie => calculateDaysOverdue(movie.fecha_alquiler!) > 0);
+    }
+
+    if (!loading && alquilado && hasMoviesWithZeroDelay()) {
+      Swal.fire({
+        title: 'Alerta de Películas',
+        text: 'Hay películas con retraso en la devolución.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      })
+    }
+  }, [loading, alquilado, movieData])
 
   const calculateDaysOverdue = (fecha_alquiler: string) => {
     const rentalDate = new Date(fecha_alquiler)
@@ -120,7 +135,7 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
     try {
       setRentingMovies(prevRenting => [...prevRenting, movieId])
 
-      const today = new Date();
+      const today = new Date()
 
       const year = today.getFullYear()
       const month = String(today.getMonth() + 1).padStart(2, '0')
@@ -150,12 +165,12 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
         throw new Error('Error al alquilar la película.')
       }
     } catch (error) {
-      console.error('Error al alquilar la película:', error)
+      console.error('Error al alquilar la película:', error);
       alert('Ocurrió un error al alquilar la película. Por favor, intenta nuevamente.')
     } finally {
       setRentingMovies(prevRenting => prevRenting.filter(id => id !== movieId))
     }
-  };
+  }
 
   const handleDevolver = async (movieId: number) => {
     try {
@@ -172,7 +187,7 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ id_user, alquilado }) 
         headers: {
           'Content-Type': 'application/json',
         },
-      });
+      })
 
       if (response.ok) {
         setMovieData(prevMovies => prevMovies.filter(movie => movie.id_pelicula !== movieId))
