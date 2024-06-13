@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Swal from 'sweetalert2'
 
 interface User {
   id: number
@@ -17,6 +18,15 @@ interface ProfileEditorProps {
 export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, setUser }) => {
   const [showPassword, setShowPassword] = useState(false)
 
+  const showSweetAlert = (message: string) => {
+    Swal.fire({
+      title: 'Operación completada',
+      text: message,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
+  }
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   }
@@ -29,7 +39,7 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, setUser }) =
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget)
     const formDataObject: any = {}
 
     formData.forEach((value, key) => {
@@ -58,11 +68,11 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, setUser }) =
       const modifiedUser = { ...updatedUser, id: id_user }
       setUser(modifiedUser)
 
-      alert('Los cambios se guardaron correctamente');
+      showSweetAlert('Los cambios se guardaron correctamente.')
     } catch (error: any) {
       alert(error.message)
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
