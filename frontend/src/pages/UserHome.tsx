@@ -151,7 +151,7 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
       <main className="p-0">
         {selectedOption === 'Catálogo de películas' && <MovieDetail id_user={user.id} alquilado={false} />}
         {selectedOption === 'Películas alquiladas' && <MovieDetail id_user={user.id} alquilado={true} />}
-        {selectedOption === 'RentalHistory' && <RentalHistory />}
+        {selectedOption === 'RentalHistory' && <RentalHistory id_user={user.id} />}
         {selectedOption === 'ProfileEditor' && <ProfileEditor user={user} setUser={setUser} />}
       </main>
     </div>
