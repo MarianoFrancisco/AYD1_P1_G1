@@ -83,3 +83,22 @@ ALTER TABLE Comentario
   ADD CONSTRAINT FK_Pelicula_TO_Comentario
     FOREIGN KEY (id_pelicula)
     REFERENCES Pelicula (id_pelicula);
+
+
+--updates
+-- Elimina las restricciones de clave externa existentes
+ALTER TABLE Alquiler DROP FOREIGN KEY FK_Pelicula_TO_Alquiler;
+ALTER TABLE Comentario DROP FOREIGN KEY FK_Pelicula_TO_Comentario;
+
+-- Agrega las restricciones de clave externa con eliminación en cascada
+ALTER TABLE Alquiler
+  ADD CONSTRAINT FK_Pelicula_TO_Alquiler
+    FOREIGN KEY (id_pelicula)
+    REFERENCES Pelicula (id_pelicula)
+    ON DELETE CASCADE;
+
+ALTER TABLE Comentario
+  ADD CONSTRAINT FK_Pelicula_TO_Comentario
+    FOREIGN KEY (id_pelicula)
+    REFERENCES Pelicula (id_pelicula)
+    ON DELETE CASCADE;
