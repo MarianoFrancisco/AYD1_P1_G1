@@ -4,8 +4,10 @@
 */
 const request = require('supertest');
 const app = require('../app');
-const api = '/api';
-const agregarPelicula = api + '/peliculas';
+const api = '/api'
+const login = api + '/login'
+const user = api + '/usuarios'
+const agregarPelicula = user + '/:id'
 
 const nuevaPelicula = {
     titulo: 'Hombres de Negro',

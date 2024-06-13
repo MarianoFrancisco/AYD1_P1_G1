@@ -4,8 +4,11 @@
 */
 const request = require('supertest');
 const app = require('../app');
-const api = '/api';
-const agregarUsuario = api + '/usuarios';
+const api = '/api'
+const login = api + '/login'
+const user = api + '/usuarios'
+const agregarUsuario = user + '/:id'
+
 
 const registrerSuccessful = {
     nombre: 'Luisa',
@@ -41,7 +44,7 @@ describe('Modulo de Registro de Usuarios', () => {
             .post(agregarUsuario)
             .send(existingUser);
 
-        //expect(response.status).toBe(404);
+        expect(response.status).toBe(404);
         expect(response.status).toBe(401);
         //expect(response.body.message).toBe('Error al agregar un nuevo usuario:');
     });

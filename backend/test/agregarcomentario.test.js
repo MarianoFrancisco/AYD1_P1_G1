@@ -5,7 +5,7 @@
 const request = require('supertest');
 const app = require('../app');
 const api = '/api';
-const agregarComentario = api + '/comentarios';
+const agregarComentario = api + '/comentarios'
 
 const nuevoComentario = {
     contenido: 'pelicula interesante',
