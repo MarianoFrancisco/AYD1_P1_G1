@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
- 
+
 import { ColumnDef } from "@tanstack/react-table"
- import { Pelicula } from "../types"
- import { MoreHorizontal } from "lucide-react"
- import { Button } from "@/components/ui/button"
+import { Pelicula } from "../types"
+import { MoreHorizontal } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,6 +59,16 @@ export const columns: ColumnDef<Pelicula>[] = [
   {
     accessorKey: "imagen",
     header: "Imagen",
+    cell: ({ row }) => {
+      const pelicula = row.original;
+      return (
+        <img
+          src={`${import.meta.env.VITE_API_URL}/img-movie/${pelicula.imagen}`}
+          alt="Imagen"
+          className="h-16 w-16 object-cover rounded-full"
+        />
+      );
+    },
   },
   {
     accessorKey: "alquilado",

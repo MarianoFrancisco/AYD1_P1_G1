@@ -10,3 +10,12 @@ export interface Pelicula  {
     alquilado: number;
     id_genero: number;
 }
+
+export interface Usuario  {
+    id_user: number;
+    nombre: string;
+    apellido: string;
+    genero: string;
+    correo: string;
+    fecha_nacimiento: Date;
+}
