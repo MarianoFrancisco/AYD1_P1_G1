@@ -34,6 +34,9 @@ function App() {
   const handleLogoutApp = () => {
     Cookies.remove("token");
     setIsLoggedIn("");
+    if (Cookies.get("admin")) {
+      Cookies.remove("admin");
+    }
   };
   return (
     <Router>
@@ -60,9 +63,9 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn} type={2} admin={Cookies.get("admin") === "true"}>
-              
+
               <AdminHome onLogout={handleLogoutApp}></AdminHome>
-              
+
             </ProtectedRoute>
           }
         />
@@ -74,7 +77,7 @@ function App() {
                 <RegistrationForm></RegistrationForm>
               </div>
             </ProtectedRoute>
-          }/>
+          } />
         <Route
           path="/"
           element={<Navigate to={isLoggedIn !== "" ? "/home" : "/login"} />}
