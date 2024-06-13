@@ -76,6 +76,32 @@ export const columns: ColumnDef<Pelicula>[] = [
       const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
       const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
+      const handleDelete = async () => {
+        try {
+          console.log("Eliminando película con id:", pelicula.id_pelicula);
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/peliculas/${pelicula.id_pelicula}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          console.log("Respuesta del servidor:", response);
+          if (response.ok) {
+            // Manejar éxito
+            console.log("Película eliminada exitosamente");
+            setIsDeleteDialogOpen(false);
+            window.location.reload();
+            // Aquí puedes actualizar la lista de películas en tu estado
+            // Ejemplo: removeMovieFromState(pelicula.id_pelicula);
+          } else {
+            const result = await response.json();
+            console.error("Error eliminando la película:", result);
+          }
+        } catch (error) {
+          console.error("Error de red:", error);
+        }
+      };
+
       return (
         <>
           <DropdownMenu>
@@ -119,7 +145,7 @@ export const columns: ColumnDef<Pelicula>[] = [
               </DialogHeader>
               <DialogFooter>
                 <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancelar</Button>
-                <Button type="submit">Confirmar</Button>
+                <Button onClick={handleDelete} >Confirmar</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
