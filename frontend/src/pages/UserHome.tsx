@@ -13,17 +13,6 @@ interface User {
   fecha_nacimiento: string
 }
 
-interface Pelicula {
-  id_pelicula: number
-  titulo: string
-  sinopsis: string
-  precio_alquiler: string
-  director: string
-  anio_estreno: string
-  duracion: string
-  genero: string
-}
-
 export function UserHome({ onLogout }: { onLogout: () => void }) {
   const [selectedOption, setSelectedOption] = useState('Catálogo de películas')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -38,7 +27,6 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
     correo: '',
     fecha_nacimiento: ''
   })
-  const [movies, setMovies] = useState<Pelicula[]>([])
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option)
@@ -80,7 +68,6 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
     }
 
     initializeUser()
-    fetchMovies()
 
     document.title = 'User Home | Peliflix'
     document.addEventListener('mousedown', handleClickOutside)
@@ -101,16 +88,6 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
     }
   }
 
-  const fetchMovies = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/peliculas`)
-      const data = await response.json()
-      setMovies(data)
-    } catch (error) {
-      console.error("Error fetching movies:", error)
-    }
-  }
-
   const getToken = () => {
     return Cookies.get('token')
   }
@@ -118,22 +95,6 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
   const decodeToken = (token: string) => {
     return JSON.parse(atob(token.split('.')[1])) as User
   }
-
-  const renderMovieCatalog = () => (
-    <>
-      {movies.map((movie) => (
-        <MovieDetail id_user={user.id} id_pelicula={movie.id_pelicula} />
-      ))}
-    </>
-  )
-
-  const renderRentedMovies = () => (
-    <>
-      {movies.map((movie) => (
-        <MovieDetail id_user={user.id} id_pelicula={movie.id_pelicula} />
-      ))}
-    </>
-  )
 
   return (
     <div className="min-h-screen bg-white text-black">
@@ -188,8 +149,8 @@ export function UserHome({ onLogout }: { onLogout: () => void }) {
         </div>
       </nav>
       <main className="p-0">
-        {selectedOption === 'Catálogo de películas' && renderMovieCatalog()}
-        {selectedOption === 'Películas alquiladas' && renderRentedMovies()}
+        {selectedOption === 'Catálogo de películas' && <MovieDetail id_user={user.id} alquilado={false} />}
+        {selectedOption === 'Películas alquiladas' && <MovieDetail id_user={user.id} alquilado={true} />}
         {selectedOption === 'RentalHistory' && <RentalHistory />}
         {selectedOption === 'ProfileEditor' && <ProfileEditor user={user} setUser={setUser} />}
       </main>
